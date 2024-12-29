@@ -1,0 +1,30 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:        # template is pod.yaml, if present no need for it
+    metadata:
+      name: nginx-dep-pod
+      labels:
+        app: nginx
+
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: my-vol
+      volumes:
+        - name: my-vol
+          persistentVolumeClaim:
+            claimName: local-pvc
+
